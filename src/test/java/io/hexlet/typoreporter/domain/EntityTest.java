@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.hexlet.typoreporter.domain.account.Account;
 import io.hexlet.typoreporter.domain.typo.Typo;
 import io.hexlet.typoreporter.domain.workspace.Workspace;
+import io.hexlet.typoreporter.domain.workspace.WorkspaceRole;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -79,5 +81,51 @@ class EntityTest {
         final var entityOne = clazz.getConstructor().newInstance().setId(1L);
         final var entityTwo = clazz.getConstructor().newInstance();
         assertThat(entityOne).isNotEqualTo(entityTwo).hasSameHashCodeAs(entityTwo);
+    }
+
+    @Test
+    void addTypo_shouldAddTypoAndSetAccount() {
+        Account account = new Account();
+        Typo typo = new Typo();
+
+        account.addTypo(typo);
+
+        assertThat(account.getTypos()).contains(typo);
+        assertThat(typo.getAccount()).isEqualTo(account);
+    }
+
+    @Test
+    void removeTypo_shouldRemoveTypoAndUnsetAccount() {
+        Account account = new Account();
+        Typo typo = new Typo();
+        account.addTypo(typo);
+
+        account.removeTypo(typo);
+
+        assertThat(account.getTypos()).doesNotContain(typo);
+        assertThat(typo.getAccount()).isNull();
+    }
+
+    @Test
+    void addWorkspaceRole_shouldAddWorkspaceRoleAndSetAccount() {
+        Account account = new Account();
+        WorkspaceRole workspaceRole = new WorkspaceRole();
+
+        account.addWorkspaceRole(workspaceRole);
+
+        assertThat(account.getWorkspaceRoles()).contains(workspaceRole);
+        assertThat(workspaceRole.getAccount()).isEqualTo(account);
+    }
+
+    @Test
+    void removeWorkspaceRole_shouldRemoveWorkspaceRoleAndUnsetAccount() {
+        Account account = new Account();
+        WorkspaceRole workspaceRole = new WorkspaceRole();
+        account.addWorkspaceRole(workspaceRole);
+
+        account.removeWorkSpaceRole(workspaceRole);
+
+        assertThat(account.getWorkspaceRoles()).doesNotContain(workspaceRole);
+        assertThat(workspaceRole.getAccount()).isNull();
     }
 }
